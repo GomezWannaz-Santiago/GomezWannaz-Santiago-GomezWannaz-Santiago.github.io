@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OrderLocationsComponent } from './order-locations.component';
+import { TttRowComponent } from './ttt-row.component';
 
-describe('OrderLocationsComponent', () => {
-  let component: OrderLocationsComponent;
-  let fixture: ComponentFixture<OrderLocationsComponent>;
+describe('TttRowComponent', () => {
+  let component: TttRowComponent;
+  let fixture: ComponentFixture<TttRowComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ OrderLocationsComponent ]
+      declarations: [ TttRowComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OrderLocationsComponent);
+    fixture = TestBed.createComponent(TttRowComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

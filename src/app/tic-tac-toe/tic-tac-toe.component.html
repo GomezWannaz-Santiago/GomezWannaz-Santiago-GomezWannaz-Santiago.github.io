@@ -1,0 +1,24 @@
+<div class="container bg-dark text-light">
+    <div *ngIf="!sizeConfirmed">
+        <form [formGroup]="boardForm">
+            <label for="cellsInput" class="form-label">Please enter the board size</label>
+            <input type="number" class="form-control" maxlength="1" formControlName="boardSize" placeholder="Type the size here...">
+            <p class="fst-italic"> Remember: A Tic-Tac-Toe board is a square.</p>        
+
+            <p class="text-danger">{{errorMessage}}</p>
+        </form>
+    </div>
+
+    <button class="btn {{btnColor}}" (click)="confirmSize()"> {{btnText}}</button>
+
+    <p>The board is {{this.boardForm.controls['boardSize'].value}} X {{this.boardForm.controls['boardSize'].value}}</p>    
+    
+    
+
+    <div *ngIf="sizeConfirmed" (click)="changeTurn()">
+        <p> Now is <b>{{turn}}</b>'s turn</p>
+        <div *ngFor="let i of [].constructor(this.parsedBoardSize)">
+            <ttt-row [cellsNumber]="this.parsedBoardSize" [tttObserver]="this.tttObserver"></ttt-row>
+        </div>
+    </div>
+</div>

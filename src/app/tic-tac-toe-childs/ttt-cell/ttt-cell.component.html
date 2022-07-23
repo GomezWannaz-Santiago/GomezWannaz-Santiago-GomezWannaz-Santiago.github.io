@@ -1,0 +1,4 @@
+
+<div class="col border border-white p-2 border-3" (click)="setValue()">
+    <p [ngClass]="{'text-center':true, 'text-wrap':true, 'text-light':!this.empty, 'text-dark':this.empty}">{{value}}</p>
+</div>
