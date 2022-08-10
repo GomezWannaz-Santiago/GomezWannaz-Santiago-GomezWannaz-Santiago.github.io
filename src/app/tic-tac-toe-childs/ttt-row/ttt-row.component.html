@@ -1,8 +1,7 @@
 
-<div class="container">    
-    <div class="row col-12">
-        <div *ngFor="let i of [].constructor(cellsNumber)" class="col p-0">
-            <ttt-cell [tttObserver]="this.tttObserver"></ttt-cell>
-        </div>   
-    </div> 
-</div>
+<div class="row px-2">
+    <div *ngFor="let i of [].constructor(cellsNumber); let id=index" class="col p-0">
+        <ttt-cell [tttObserver]="this.tttObserver" [rowId]="rowId" [cellId]="id"></ttt-cell>
+    </div>   
+</div> 
+

@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { TTTCell } from '../entities/tic-tac-toe-cell';
 import { TTTObserver } from '../entities/tic-tac-toe-observer';
 
 @Component({
@@ -17,10 +18,8 @@ export class TicTacToeComponent implements OnInit {
   parsedBoardSize = 0;
   turn = "X"
   tttObserver : TTTObserver;
-
-
-  @Output() reset = new EventEmitter<boolean>();
-
+  win : boolean = false;
+  boardFull : boolean = false;
 
   constructor(formBuilder : FormBuilder) { 
     this.boardForm = formBuilder.group({
@@ -36,16 +35,16 @@ export class TicTacToeComponent implements OnInit {
   
   confirmSize(){    
     let control = this.boardForm.controls['boardSize'];
-
+    this.win = false;
+    this.boardFull = false;
     if(control.disabled){
       control.enable();
       this.btnText = "Confirm board size";
       this.btnColor = "btn-success"
       this.sizeConfirmed = false;  
-
       this.resetBoard();
 
-      return
+      return;
     }
 
     let validatedSize = this.validateBoardSize(control.value);
@@ -76,11 +75,72 @@ export class TicTacToeComponent implements OnInit {
   resetBoard(){
     this.boardForm.controls['boardSize'].setValue(0);
     this.tttObserver = new TTTObserver(this.turn);    
-    this.reset.emit(true);        
   }
 
   changeTurn(){
-    this.turn = this.tttObserver.getTurn();
+    
+    if(this.win || this.boardFull){
+      return;
+    }
+    var usedCells = this.tttObserver.getUsedCells()
+    this.checkWin(usedCells)
+
+    if(!this.win){
+      if(usedCells.length == this.parsedBoardSize * this.parsedBoardSize ){
+        this.boardFull = true;
+        return;
+      }       
+      this.turn = this.tttObserver.getTurn(); 
+    }      
+    
+  }
+
+  checkWin(board : Array<TTTCell>){
+    //debugger;
+    let size = this.parsedBoardSize;
+    let rowCounter : number = 0;
+    var columnCounter = 0;
+    var diagonalCounter = 0
+    var invertedDiagonalCounter = 0;
+
+    let rowNumber : number;
+    for(var i = 0; i < size; i++ ){
+      rowNumber = i;    
+     
+      board.forEach(element => {
+
+        if(element.turn == this.turn){
+          if(rowNumber == element.row){
+            rowCounter++;     
+            if(rowNumber == element.column){
+              diagonalCounter++;              
+            }     
+            if(size-1 - rowNumber == element.column){
+              invertedDiagonalCounter++;
+            }
+          }
+        }
+        else {
+          if(rowNumber == element.row){
+            rowCounter--;  
+            if(rowNumber == element.column){
+            
+            diagonalCounter--;
+          }
+          if(size-1 - rowNumber == element.column){
+            invertedDiagonalCounter--;
+          }
+          }        
+     
+        }                                                          
+        element.column == rowNumber ? element.turn == this.turn ? columnCounter++ : columnCounter-- : columnCounter;
+      });
+      if([rowCounter,columnCounter,invertedDiagonalCounter,diagonalCounter].indexOf(size) != -1){        
+        this.win = true;
+      }
+      rowCounter = columnCounter = 0; 
+    }
+    invertedDiagonalCounter = diagonalCounter = 0;     
   }
 
 }

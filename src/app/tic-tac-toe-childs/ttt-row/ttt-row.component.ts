@@ -8,6 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class TttRowComponent implements OnInit {
 
   @Input() cellsNumber : number = 0;
+  @Input() rowId : number =0;
   @Input() tttObserver : any = null;
 
   constructor() { }

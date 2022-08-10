@@ -1,24 +1,47 @@
 <div class="container bg-dark text-light">
     <div *ngIf="!sizeConfirmed">
         <form [formGroup]="boardForm">
-            <label for="cellsInput" class="form-label">Please enter the board size</label>
-            <input type="number" class="form-control" maxlength="1" formControlName="boardSize" placeholder="Type the size here...">
-            <p class="fst-italic"> Remember: A Tic-Tac-Toe board is a square.</p>        
-
-            <p class="text-danger">{{errorMessage}}</p>
+            <div class="form-group row pt-2 pb-1">                
+                <label for="boardSize" for="boardSize" class="col-sm-4 form-label">Board Size : </label>                            
+                <div class="col-sm-8">
+                    <input type="number" class="form-control" maxlength="1" id="boardSize" formControlName="boardSize" placeholder="Type the board size here...">
+                </div>                
+            </div>        
+            
+            <div class="row">
+                <p class="fst-italic"> Remember: A Tic-Tac-Toe board is always a square.</p>        
+            </div>        
+            
         </form>
+        <p class="text-center p-2" *ngIf="this.boardForm.controls['boardSize'].value">The board will be {{this.boardForm.controls['boardSize'].value}} X {{this.boardForm.controls['boardSize'].value}}</p>    
+        <p class="text-danger text-center">{{errorMessage}}</p>
+    </div>
+    
+    
+
+    <div class="row py-2">
+        <div class=" col-sm-12 text-center">            
+            <button class="btn-lg {{btnColor}}" (click)="confirmSize()"> {{btnText}}</button>
+        </div>
+
+    </div>        
+        
+    <div *ngIf="sizeConfirmed" class="row text-center" (click)="changeTurn()">
+        <p> Now is <b>{{turn}}</b>'s turn</p>
+        <div class="" *ngFor="let i of [].constructor(this.parsedBoardSize); let ind = index">
+            <ttt-row [cellsNumber]="this.parsedBoardSize" [rowId]="ind" [tttObserver]="this.tttObserver"></ttt-row>
+        </div>
     </div>
 
-    <button class="btn {{btnColor}}" (click)="confirmSize()"> {{btnText}}</button>
+    <div class="row pt-4">
+        <div *ngIf="win" class="text-center">
+            <h1> {{this.turn}} Has Won!</h1>        
+            <button type="button" class="col-sm-6 btn btn-block btn-danger" (click)="confirmSize()" > Play Again</button>
+        </div>
 
-    <p>The board is {{this.boardForm.controls['boardSize'].value}} X {{this.boardForm.controls['boardSize'].value}}</p>    
-    
-    
-
-    <div *ngIf="sizeConfirmed" (click)="changeTurn()">
-        <p> Now is <b>{{turn}}</b>'s turn</p>
-        <div *ngFor="let i of [].constructor(this.parsedBoardSize)">
-            <ttt-row [cellsNumber]="this.parsedBoardSize" [tttObserver]="this.tttObserver"></ttt-row>
+        <div *ngIf="boardFull" class="text-center">
+            <h1> The board is full!</h1>        
+            <button type="button" class="col-sm-6 btn btn-block btn-danger" (click)="confirmSize()" > Play Again</button>
         </div>
     </div>
 </div>
